@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <h1>
+    Our workers positions:
+    <a href="{% url 'manager:position-create' %}" class="btn btn-primary link-to-page">
+      Create
+    </a>
+  </h1>
+
+  <br>
+
+  <form action="" method="get" class="form-inline">
+    {{ search_form|crispy }}
+    <input type="submit" value="search" class="btn btn-primary">
+  </form>
+
+  <br>
+  {% if position_list %}
+    <ul>
+      {% for position in position_list %}
+        <li>
+          <a href="{% url "manager:position-detail" pk=position.id %} ">{{ position.id }}</a>
+          {{ position.name }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no positions in order</p>
+  {% endif %}
+{% endblock %}

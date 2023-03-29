@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>
+    Position: {{ position.name }}
+    <a href="{% url 'manager:position-delete' pk=position.id %}" class="btn btn-danger link-to-page">
+      Delete Position
+    </a>
+  </h1>
+
+{#  <p><strong>Position:</strong> {{ position.name }}</p>#}
+
+{#  {% if position.workers %}#}
+{#    {% for worker in position.workers.all %}#}
+{#      <p>{{ worker.name }}</p>#}
+{#    {% endfor %}#}
+{#  {% else %}#}
+{#    Thera are no workers for this position!(#}
+{#  {% endif %}#}
+
+
+  {% for worker in position.workers.all %}
+    <hr>
+    <p><strong>Name:</strong> {{ worker.first_name }} {{ worker.last_name }}</p>
+    <p><strong>Position:</strong> {{ worker.position }}</p>
+    <p class="text-muted"><strong>Id:</strong> {{ worker.id }}</p>
+
+  {% empty %}
+    <p>No tasks!</p>
+  {% endfor %}
+
+
+
+{% endblock %}
