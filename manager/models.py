@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.urls import reverse
@@ -10,21 +11,26 @@ class TaskType(models.Model):
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class Position(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255)
 
     class Meta:
         ordering = ["name"]
 
     def __str__(self):
-        return f"{self.name}"
+        return self.name
 
 
 class Worker(AbstractUser):
-    position = models.ForeignKey(Position, on_delete=models.CASCADE)
+    position = models.ForeignKey(
+        Position,
+        related_name="workers",
+        on_delete=models.CASCADE,
+        null=True
+    )
 
     class Meta:
         verbose_name = "worker"
@@ -49,7 +55,9 @@ class Task(models.Model):
         (LOW, 'Low'),
     ]
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(
+        blank=True
+    )
     deadline = models.DateTimeField(null=True)
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(
@@ -57,10 +65,17 @@ class Task(models.Model):
         choices=TASKS_PRIORITY,
         default=LOW
     )
-    task_type = models.ForeignKey(TaskType, on_delete=models.CASCADE)
+    task_type = models.ForeignKey(
+        TaskType,
+        on_delete=models.CASCADE
+    )
+    assignees = models.ManyToManyField(
+        settings.AUTH_USER_MODEL
+    )
 
     class Meta:
         ordering = ["name"]
+        default_related_name = "tasks"
 
     def __str__(self):
         return self.name
