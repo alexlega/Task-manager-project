@@ -4,7 +4,7 @@
   <div class="container">
     <h1>
       Username: {{ worker.username }}
-      <a href="{% url 'taxi:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">
+      <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">
         Delete
       </a>
 
