@@ -1,3 +1,49 @@
+{#{% extends "base.html" %}#}
+{##}
+{#{% block content %}#}
+{#  <h1>#}
+{#    Task: {{ task.name }}#}
+{#    <a href="{% url 'manager:task-delete' pk=task.id %}" class="btn btn-danger link-to-page">#}
+{#      Delete Task#}
+{#    </a>#}
+{##}
+{#    <a href="{% url 'manager:task-update' pk=task.id %}" class="btn btn-secondary link-to-page">#}
+{#      Update task info#}
+{#    </a>#}
+{#  </h1>#}
+{##}
+{#  <p><strong>Name:</strong> {{ task.name }}</p>#}
+{#  <p><strong>Description:</strong> {{ task.description }}</p>#}
+{#  <p><strong>Task type:</strong> {{ task.task_type }}</p>#}
+{#  <p><strong>Status:</strong> {% if task.is_completed == False %}In progress{% else %}DONE!{% endif %}</p>#}
+{#  {% if task.is_completed == False %}#}
+{#    <form action="{% url 'manager:task-complete' task.pk %}" method="post">#}
+{#      {% csrf_token %}#}
+{#      <button type="submit" class="btn" style="background-color: green; color: white;">Mark as completed</button>#}
+{#    </form>#}
+{#  {% else %}#}
+{#    <form action="{% url 'manager:task-reject' task.pk %}" method="post">#}
+{#      {% csrf_token %}#}
+{#      <button type="submit" class="btn" style="background-color: red; color: white;">Reject</button>#}
+{#    </form>#}
+{#  {% endif %}#}
+{##}
+{#  <br>#}
+{##}
+{#  <div class="ml-3">#}
+{#    <h4>Workers with this task</h4>#}
+{##}
+{#    {% for worker in task.assignees.all %}#}
+{#      <hr>#}
+{#      <p><strong>Name:</strong><a href="{{ worker.get_absolute_url }}">{{ worker.first_name }} {{ worker.last_name }}</a></p>#}
+{#      <p><strong>Position:</strong> {{ worker.position }}</p>#}
+{#    {% empty %}#}
+{#      <p>No tasks!</p>#}
+{#    {% endfor %}#}
+{#  </div>#}
+{#{% endblock %}#}
+
+
 {% extends "base.html" %}
 
 {% block content %}
@@ -12,23 +58,33 @@
     </a>
   </h1>
 
-  <p><strong>Name:</strong> {{ task.name }}</p>
-  <p><strong>Description:</strong> {{ task.description }}</p>
-  <p><strong>Task type:</strong> {{ task.task_type }}</p>
-  <p><strong>Status:</strong> {% if task.is_completed == False %}In progress{% else %}DONE!{% endif %}</p>
-
-
-  <div class="ml-3">
-    <h4>Workers with this task</h4>
-
-    {% for worker in task.assignees.all %}
-      <hr>
-      <p><strong>Name:</strong> {{ worker.first_name }}</p>
-      <p><strong>Position:</strong> {{ worker.position }}</p>
-      <p class="text-muted"><strong>Id:</strong> {{ task.id }}</p>
-
-    {% empty %}
-      <p>No tasks!</p>
-    {% endfor %}
+  <div class="row">
+    <div class="col-md-6">
+      <p><strong>Name:</strong> {{ task.name }}</p>
+      <p><strong>Description:</strong> {{ task.description }}</p>
+      <p><strong>Task type:</strong> {{ task.task_type }}</p>
+      <p><strong>Status:</strong> {% if task.is_completed == False %}In progress{% else %}DONE!{% endif %}</p>
+      {% if task.is_completed == False %}
+        <form action="{% url 'manager:task-complete' task.pk %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn" style="background-color: green; color: white;">Mark as completed</button>
+        </form>
+      {% else %}
+        <form action="{% url 'manager:task-reject' task.pk %}" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn" style="background-color: red; color: white;">Reject</button>
+        </form>
+      {% endif %}
+    </div>
+    <div class="col-md-6">
+      <h4>Workers with this task</h4>
+      {% for worker in task.assignees.all %}
+        <hr>
+        <p><strong>Name:</strong><a href="{{ worker.get_absolute_url }}">{{ worker.first_name }} {{ worker.last_name }}</a></p>
+        <p><strong>Position:</strong> {{ worker.position }}</p>
+      {% empty %}
+        <p>No tasks!</p>
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

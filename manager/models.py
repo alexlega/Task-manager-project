@@ -77,5 +77,8 @@ class Task(models.Model):
         ordering = ["name"]
         default_related_name = "tasks"
 
+    def get_absolute_url(self):
+        return reverse("manager:task-detail", kwargs={"pk": self.pk})
+
     def __str__(self):
         return self.name

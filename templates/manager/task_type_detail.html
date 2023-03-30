@@ -7,18 +7,17 @@
       Delete
     </a>
   </h1>
-
   <div class="ml-3">
-
-  {% if tasktype.tasks %}
-    <h4>Opened tasks for this type</h4>
-    {% for task in tasktype.tasks.all %}
-      <p><strong>Status:</strong> {{ task.is_completed }}</p>
-      <p><strong>Priority:</strong> {{ task.priority }}</p>
-    {% endfor %}
-  {% else %}
-    No tasks!
-  {% endif %}
-
+    {% if tasktype.tasks %}
+      {% for task in tasktype.tasks.all %}
+        <hr>
+        <p><strong>Status:</strong> {% if task.is_completed == False %}In progress{% else %}Done!{% endif %}</p>
+        <p><strong>Priority:</strong> {{ task.priority }}</p>
+      {% endfor %}
+    {% else %}
+      No tasks!
+    {% endif %}
   </div>
+
 {% endblock %}
+

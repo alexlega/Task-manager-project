@@ -1,14 +1,29 @@
 from django.urls import path
 
 from .views import (
-    index, WorkerListView, TaskListView, TaskTypeListView, PositionListView, WorkerCreateView, WorkerDetailView,
-    WorkerDeleteView, WorkerUpdateView, TaskCreateView, TaskUpdateView, TaskDeleteView, TaskDetailView,
-    PositionCreateView, PositionDetailView, PositionDeleteView, TaskTypeCreateView, TaskTypeDetailView,
+    index,
+    WorkerListView,
+    TaskListView,
+    TaskTypeListView,
+    PositionListView,
+    WorkerCreateView,
+    WorkerDetailView,
+    WorkerDeleteView,
+    WorkerUpdateView,
+    TaskCreateView,
+    TaskUpdateView,
+    TaskDeleteView,
+    TaskDetailView,
+    PositionCreateView,
+    PositionDetailView,
+    PositionDeleteView,
+    TaskTypeCreateView,
+    TaskTypeDetailView,
     TaskTypeDeleteView,
+    CompleteTaskView,
+    RejectTaskView,
+    PositionUpdateView,
 
-    # TaskTypeListView, TaskTypeCreateView, TaskTypeUpdateView, TaskTypeDeleteView, TaskListView,
-    # TaskDetailView, TaskCreateView, TaskUpdateView, TaskDeleteView, WorkerUpdateView, WorkerDeleteView,
-    # WorkerDetailView, WorkerCreateView,
 )
 
 urlpatterns = [
@@ -18,21 +33,6 @@ urlpatterns = [
         TaskTypeListView.as_view(),
         name="task-type-list",
     ),
-    # path(
-    #     "task-types/create/",
-    #     TaskTypeCreateView.as_view(),
-    #     name="task-types-create",
-    # ),
-    # path(
-    #     "task-types/<int:pk>/update/",
-    #     TaskTypeUpdateView.as_view(),
-    #     name="task-types-update",
-    # ),
-    # path(
-    #     "task-types/<int:pk>/delete/",
-    #     TaskTypeDeleteView.as_view(),
-    #     name="task-types-delete",
-    # ),
     path("tasks/", TaskListView.as_view(), name="task-list"),
     path("tasks/<int:pk>/", TaskDetailView.as_view(), name="task-detail"),
     path("tasks/create/", TaskCreateView.as_view(), name="task-create"),
@@ -64,6 +64,7 @@ urlpatterns = [
         name="position-create",
     ),
     path("positions/<int:pk>/", PositionDetailView.as_view(), name="position-detail"),
+    path("positions/<int:pk>/update/", PositionUpdateView.as_view(), name="position-update"),
     path("positions/<int:pk>/delete/", PositionDeleteView.as_view(), name="position-delete"),
     path(
         "task-types/create/",
@@ -80,6 +81,8 @@ urlpatterns = [
         TaskTypeDeleteView.as_view(),
         name="task-type-delete",
     ),
+    path('task/<int:pk>/complete/', CompleteTaskView.as_view(), name='task-complete'),
+    path('task/<int:pk>/reject/', RejectTaskView.as_view(), name='task-reject'),
 ]
 
-app_name = "taxi"
+app_name = "manager"

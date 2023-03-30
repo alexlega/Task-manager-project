@@ -2,44 +2,56 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-    <h1>
-      Driver List
-      <a href="{% url 'manager:worker-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    </h1>
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title">
+            Worker List
+            <a href="{% url 'manager:worker-create' %}" class="btn btn-dark float-right">
+              Create
+            </a>
+          </h1>
 
-    <br>
+          <br>
 
-    <form action="" method="get" class="form-inline">
-      {{ search_form|crispy }}
-      <input type="submit" value="search" class="btn btn-primary">
-    </form>
+          <form action="" method="get" class="form-inline">
+            {{ search_form|crispy }}
+            <input type="submit" value="Search" class="btn btn-dark">
+          </form>
 
-    <br>
+          <br>
 
-
-    {% if worker_list %}
-    <table class="table">
-      <tr>
-        <th>ID</th>
-        <th>Username</th>
-        <th>First name</th>
-        <th>Last name</th>
-        <th>Position</th>
-      </tr>
-    {% for worker in worker_list %}
-      <tr>
-        <td>{{ worker.id }}</td>
-        <td><a href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
-        <td>{{ worker.first_name }}</td>
-        <td>{{ worker.last_name }}</td>
-        <td>{{ worker.position }}</td>
-      </tr>
-    {% endfor %}
-
-    </table>
-    {% else %}
-      <p>There are no workers in the task manager.</p>
-    {% endif %}
+          {% if worker_list %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>First name</th>
+                  <th>Last name</th>
+                  <th>Position</th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for worker in worker_list %}
+                <tr>
+                  <td>{{ worker.id }}</td>
+                  <td><a href="{{ worker.get_absolute_url }}">{{ worker.username }} {% if user == worker %} (Me){% endif %}</a></td>
+                  <td>{{ worker.first_name }}</td>
+                  <td>{{ worker.last_name }}</td>
+                  <td>{{ worker.position }}</td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+            <p>There are no workers in the task manager.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}

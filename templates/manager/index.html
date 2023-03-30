@@ -1,19 +1,46 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Task Manager</h1>
-    <p>Welcome to our task manager!</p>
-    <h2>Dynamic content</h2>
-    <p>Info:</p>
-    <ul>
-      <li><strong>Workers:</strong> {{ num_workers }}</li>
-      <li><strong>Positions:</strong> {{ num_positions }}</li>
-      <li><strong>Tasks:</strong> {{ num_tasks }}</li>
-      <li><strong>Task types:</strong> {{ num_task_types }}</li>
-    </ul>
-{##}
-{#    <p>You have visited this page#}
-{#        {{ num_visits }} time{{ num_visits|pluralize }}.#}
-{#    </p>#}
-
+    <div class="jumbotron text-center">
+        <h1 class="display-4">Task Manager</h1>
+        <p class="lead">Welcome to our task manager!</p>
+    </div>
+    <div class="container text-center">
+        <h2>Some information about us:</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ num_workers }}</h5>
+                        <p class="card-text">Workers</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ num_positions }}</h5>
+                        <p class="card-text">Positions</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ num_tasks }}</h5>
+                        <p class="card-text">Tasks</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ num_task_types }}</h5>
+                        <p class="card-text">Task Types</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+

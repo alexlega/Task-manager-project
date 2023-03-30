@@ -2,29 +2,30 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-from manager.models import Worker, Task
+from manager.models import Worker, Task, Position
 
 
 class TaskForm(forms.ModelForm):
-    workers = forms.ModelMultipleChoiceField(
+    assignees = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
 
     class Meta:
         model = Task
-        fields = ["name", "description", "deadline", "is_completed", "priority",
-                  "task_type", "workers"]
+        fields = "__all__"
+
+    def save(self, commit=True):
+        task = super().save(commit=False)
+        if commit:
+            task.save()
+            self.save_m2m()
+        return task
 
 
 class PositionForm(forms.ModelForm):
-    workers = forms.ModelMultipleChoiceField(
-        queryset=get_user_model().objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-    )
-
     class Meta:
-        model = Task
+        model = Position
         fields = "__all__"
 
 
