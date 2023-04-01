@@ -5,11 +5,28 @@ from django.contrib.auth.forms import UserCreationForm
 from manager.models import Worker, Task, Position
 
 
+# class ListWidget(forms.Textarea):
+#     def __init__(self, *args, **kwargs):
+#         self.new_item_text = kwargs.pop('new_item_text', 'Add a new item')
+#         super().__init__(*args, **kwargs)
+#
+#     def render(self, name, value, attrs=None, renderer=None):
+#         if value is None:
+#             value = ''
+#         output = '<ul>'
+#         for line in value.split('\n'):
+#             output += f'<li>{line.strip()}</li>'
+#         output += '</ul>'
+#         output += f'<input type="text" placeholder="{self.new_item_text}">'
+#         return output
+
+
 class TaskForm(forms.ModelForm):
     assignees = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
+    # description = forms.CharField(widget=forms.Textarea)
 
     class Meta:
         model = Task
@@ -81,3 +98,18 @@ class PositionSearchForm(forms.Form):
         widget=forms.TextInput(
             attrs={"placeholder": "Search by position..."})
     )
+
+
+class NewWorkerForm(UserCreationForm):
+    # email = forms.EmailField(required=True)
+
+    class Meta:
+        model = Worker
+        fields = ("username", "first_name", "last_name", "email", "password1", "password2")
+
+    def save(self, commit=True):
+        user = super(NewWorkerForm, self).save(commit=False)
+        user.email = self.cleaned_data['email']
+        if commit:
+            user.save()
+        return user

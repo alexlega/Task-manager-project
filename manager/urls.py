@@ -83,6 +83,7 @@ urlpatterns = [
     ),
     path('task/<int:pk>/complete/', CompleteTaskView.as_view(), name='task-complete'),
     path('task/<int:pk>/reject/', RejectTaskView.as_view(), name='task-reject'),
+
 ]
 
 app_name = "manager"

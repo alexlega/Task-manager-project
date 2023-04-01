@@ -1,15 +1,19 @@
+import datetime
 from datetime import date
 
-from django.contrib.auth import get_user_model
+
+from django.contrib import messages
+from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views import generic
 from django.views.generic import DetailView
 
 from manager.forms import WorkerSearchForm, TaskSearchForm, TaskTypeSearchForm, WorkerCreationForm, WorkerUpdateForm, \
-    TaskForm, PositionSearchForm, PositionForm
+    TaskForm, PositionSearchForm, PositionForm, NewWorkerForm
 from manager.models import Worker, Task, TaskType, Position
 
 
@@ -75,7 +79,6 @@ class TaskTypeCreateView(LoginRequiredMixin, generic.CreateView):
 class TaskTypeDetailView(LoginRequiredMixin, generic.DetailView):
     model = TaskType
     template_name = "manager/task_type_detail.html"
-    # queryset = TaskType.objects.all()
 
 
 class TaskTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
@@ -108,6 +111,12 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         context = super(TaskListView, self).get_context_data(**kwargs)
 
         name = self.request.GET.get("name", "")
+
+        expired_task = Task.objects.filter(deadline__lt=timezone.now())
+        # uncompleted_tasks = Task.objects.filter( is_completed=False)
+
+        context["expired_task"] = expired_task
+        # context["uncompleted_tasks"] = uncompleted_tasks
 
         context["search_form"] = TaskSearchForm(initial={
             "name": name
@@ -264,8 +273,22 @@ class CompleteTaskView(LoginRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         task = self.get_object()
         task.is_completed = True
+        # task.complete_date = timezone.now() # added new string
         task.save()
         return redirect(reverse_lazy('manager:task-detail', kwargs={'pk': task.pk}))
+
+
+def register_request(request):
+    if request.method == "POST":
+        form = NewWorkerForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("manager:index")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewWorkerForm()
+    return render(request=request, template_name="registration/register.html", context={"register_form": form})
 
 
 class RejectTaskView(LoginRequiredMixin, DetailView):
@@ -274,6 +297,7 @@ class RejectTaskView(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         task = self.get_object()
-        task.is_completed = False
+        task.is_completed = None
+        # task.complete_date = False # new string
         task.save()
         return redirect(reverse_lazy('manager:task-detail', kwargs={'pk': task.pk}))
