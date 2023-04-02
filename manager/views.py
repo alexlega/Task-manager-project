@@ -1,7 +1,3 @@
-import datetime
-from datetime import date
-
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
@@ -108,14 +104,15 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
     paginate_by = 5
 
     def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(TaskListView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
 
         name = self.request.GET.get("name", "")
+        # today_date = timezone.now()
 
-        expired_task = Task.objects.filter(deadline__lt=timezone.now())
+        # expired_task = Task.objects.filter(deadline__lt=datetime.date)
         # uncompleted_tasks = Task.objects.filter( is_completed=False)
 
-        context["expired_task"] = expired_task
+        # context["expired_task"] = expired_task
         # context["uncompleted_tasks"] = uncompleted_tasks
 
         context["search_form"] = TaskSearchForm(initial={
@@ -136,14 +133,10 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-#
-#
 class TaskDetailView(LoginRequiredMixin, generic.DetailView):
     model = Task
 
 
-#
-#
 class TaskCreateView(LoginRequiredMixin, generic.CreateView):
     model = Task
     form_class = TaskForm

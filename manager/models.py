@@ -59,7 +59,6 @@ class Task(models.Model):
         blank=True
     )
     deadline = models.DateTimeField(null=True)
-    # complete_date = models.DateTimeField(null=True)  # added new field
     is_completed = models.BooleanField(default=False)
     priority = models.CharField(
         max_length=2,

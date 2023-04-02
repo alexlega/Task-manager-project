@@ -26,6 +26,8 @@ class TaskForm(forms.ModelForm):
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
+
+
     # description = forms.CharField(widget=forms.Textarea)
 
     class Meta:
