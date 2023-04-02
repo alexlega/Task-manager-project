@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <h1 class="card-title">
+            Task types list
+            <a href="{% url 'manager:task-type-create' %}" class="btn btn-dark float-right">
+              Create
+            </a>
+          </h1>
+          <br>
+
+          <form action="" method="get" class="form-inline">
+            {{ search_form|crispy }}
+            <input type="submit" value="Search" class="btn btn-dark">
+          </form>
+
+          <br>
+
+          {% if task_type_list %}
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead class="thead-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Task type</th>
+                  <th>Number of tasks</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for task_type in task_type_list %}
+                  <tr>
+                    <td>{{ task_type.id }}</td>
+                    <td><a href="{% url "manager:task-type-detail" pk=task_type.id %} ">{{ task_type.name }}</a></td>
+                    <td>{{ task_type.tasks.count }}</td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          {% else %}
+            <p>There are no workers in the task manager.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
