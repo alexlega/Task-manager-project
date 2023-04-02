@@ -3,9 +3,13 @@ A simple program for managing tasks within the company. The functionality of the
 
 Link to project: task-manager-o2fx.onrender.com
 
+Test user: 
+    username: user
+    password: user12345
+
 
 When creating this application, the capabilities of the Django framework were used. The front end was written using Bootstrap 4.
-Simple scheme of db srycture:
+Simple scheme of db structure:
 
 ![image](https://user-images.githubusercontent.com/110207611/228903561-ee070a9c-37f3-42de-a0d5-db5961f8ed09.png)
 
