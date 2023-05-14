@@ -1,8 +1,12 @@
-"Task-manager-project" 
-A simple program for managing tasks within the company. The functionality of the program allows you to issue tasks to employees and track the work process. At the moment there are many ideas for improvement, so work will continue both on the functionality and on the appearance of the program.
+# Task Manager Project
 
-When creating this application, the capabilities of the Django framework were used. The front end was written using Bootstrap 4.
-Simple scheme of db srycture:
+"Task-manager-project" is a simple program for managing tasks within the company. The functionality of the program allows you to issue tasks to employees and track the work process. At the moment there are many ideas for improvement, so work will continue on the functionality and appearance of the program.
+## Technologies
+
+When creating this application, the capabilities of the Django framework were used. The front end was written using Bootstrap 4. 
+
+## Database structure
+A simple scheme of the DB structure:
 
 ![image](https://user-images.githubusercontent.com/110207611/228903561-ee070a9c-37f3-42de-a0d5-db5961f8ed09.png)
 
