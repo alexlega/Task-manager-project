@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.utils import timezone
 from django.views import generic
 from django.views.generic import DetailView
 
@@ -32,8 +31,6 @@ def index(request):
     return render(request, "manager/index.html", context=context)
 
 
-# -----------------------------------------------------------------------------------------------------------
-#
 class TaskTypeListView(LoginRequiredMixin, generic.ListView):
     model = TaskType
     context_object_name = "task_type_list"
@@ -107,13 +104,6 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         context = super().get_context_data(**kwargs)
 
         name = self.request.GET.get("name", "")
-        # today_date = timezone.now()
-
-        # expired_task = Task.objects.filter(deadline__lt=datetime.date)
-        # uncompleted_tasks = Task.objects.filter( is_completed=False)
-
-        # context["expired_task"] = expired_task
-        # context["uncompleted_tasks"] = uncompleted_tasks
 
         context["search_form"] = TaskSearchForm(initial={
             "name": name
@@ -122,7 +112,7 @@ class TaskListView(LoginRequiredMixin, generic.ListView):
         return context
 
     def get_queryset(self):
-        queryset = Task.objects.all().select_related("task_type")
+        queryset = Task.objects.select_related("task_type")
         form = TaskSearchForm(self.request.GET)
 
         if form.is_valid():
@@ -183,7 +173,7 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
 
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
-    queryset = Worker.objects.all().prefetch_related("tasks__task_type")
+    queryset = Worker.objects.prefetch_related("tasks__task_type")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -266,7 +256,6 @@ class CompleteTaskView(LoginRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         task = self.get_object()
         task.is_completed = True
-        # task.complete_date = timezone.now() # added new string
         task.save()
         return redirect(reverse_lazy('manager:task-detail', kwargs={'pk': task.pk}))
 
@@ -291,6 +280,5 @@ class RejectTaskView(LoginRequiredMixin, DetailView):
     def post(self, request, *args, **kwargs):
         task = self.get_object()
         task.is_completed = None
-        # task.complete_date = False # new string
         task.save()
         return redirect(reverse_lazy('manager:task-detail', kwargs={'pk': task.pk}))
