@@ -1,70 +1,188 @@
+{#{% extends "base.html" %}#}
+{##}
+{#{% block content %}#}
+{#  <br>#}
+{#  <div class="container">#}
+{#    <h1>#}
+{#      Username: {{ worker.username }}#}
+{#      <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">Delete</a>#}
+{#      <a href="{% url 'manager:worker-update' pk=worker.id %}" class="btn btn-secondary link-to-page">Update worker info</a>#}
+{#    </h1>#}
+{##}
+{#    <hr>#}
+{##}
+{#    <div class="row">#}
+{#      <div class="col-md-6">#}
+{#        <h3>Personal Information</h3>#}
+{#        <table class="table table-striped">#}
+{#          <tr>#}
+{#            <td><strong>First name:</strong></td>#}
+{#            <td>{{ worker.first_name }}</td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><strong>Last name:</strong></td>#}
+{#            <td>{{ worker.last_name }}</td>#}
+{#          </tr>#}
+{#          <tr>#}
+{#            <td><strong>Position:</strong></td>#}
+{#            <td>{{ worker.position }}</td>#}
+{#          </tr>#}
+{#        </table>#}
+{#      </div>#}
+{##}
+{#      <div class="col-md-6">#}
+{#        <h3>Tasks</h3>#}
+{#        <h4>Completed tasks ✔️</h4>#}
+{#        {% if completed_tasks %}#}
+{#          {% for task in completed_tasks %}#}
+{#            <hr>#}
+{#            <p><strong>Name:</strong> <a href="{{ task.get_absolute_url }}">{{ task.name }}</a></p>#}
+{#            <p><strong>Task Type:</strong> {{ task.task_type.name }}</p>#}
+{#            <p class="text-muted"><strong>ID:</strong> {{ task.id }}</p>#}
+{#          {% endfor %}#}
+{#          <nav aria-label="Completed Tasks Pagination">#}
+{#            <ul class="pagination">#}
+{#              {% if completed_tasks.has_previous %}#}
+{#                <li class="page-item"><a class="page-link" href="?completed_tasks_page={{ completed_tasks.previous_page_number }}">previous</a></li>#}
+{#              {% endif %}#}
+{#              {% for page in completed_tasks.paginator.page_range %}#}
+{#                {% if uncompleted_tasks.number == page %}#}
+{#                  <li class="page-item active"><a class="page-link" style="background-color: lightslategrey; color: beige" href="?completed_tasks_page={{ page }}">{{ page }} of {{ completed_tasks.paginator.num_pages  }}</a></li>#}
+{#                {% endif %}#}
+{#              {% endfor %}#}
+{#              {% if completed_tasks.has_next %}#}
+{#                <li class="page-item"><a class="page-link" href="?completed_tasks_page={{ completed_tasks.next_page_number }}">next</a></li>#}
+{#              {% endif %}#}
+{#            </ul>#}
+{#          </nav>#}
+{#        {% else %}#}
+{#          <p>No completed tasks!</p>#}
+{#        {% endif %}#}
+{##}
+{#        <h4>Uncompleted tasks ❌</h4>#}
+{#        {% if uncompleted_tasks %}#}
+{#          {% for task in uncompleted_tasks %}#}
+{#            <hr>#}
+{#            <p><strong>Name:</strong> <a href="{{ task.get_absolute_url }}">{{ task.name }}</a></p>#}
+{#            <p><strong>Task Type:</strong> {{ task.task_type.name }}</p>#}
+{#            <p class="text-muted"><strong>ID:</strong> {{ task.id }}</p>#}
+{#          {% endfor %}#}
+{#          <nav aria-label="Uncompleted Tasks Pagination">#}
+{#            <ul class="pagination">#}
+{#              {% if uncompleted_tasks.has_previous %}#}
+{#                <li class="page-item"><a class="page-link" href="?uncompleted_tasks_page={{ uncompleted_tasks.previous_page_number }}">previous</a></li>#}
+{#              {% endif %}#}
+{#              {%for page in uncompleted_tasks.paginator.page_range %}#}
+{#                {% if uncompleted_tasks.number == page %}#}
+{#                  <li class="page-item active"><a class="page-link" style="background-color: lightslategrey; color: beige" href="?uncompleted_tasks_page={{ page }}">{{ page }} of {{ uncompleted_tasks.paginator.num_pages  }}</a></li>#}
+{#                {% endif %}#}
+{#              {% endfor %}#}
+{#              {% if uncompleted_tasks.has_next %}#}
+{#                <li class="page-item"><a class="page-link" href="?uncompleted_tasks_page={{ uncompleted_tasks.next_page_number }}">next</a></li>#}
+{#              {% endif %}#}
+{#            </ul>#}
+{#          </nav>#}
+{#        {% else %}#}
+{#          <p>No uncompleted tasks!</p>#}
+{#        {% endif %}#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#{% endblock %}#}
+
 {% extends "base.html" %}
 
 {% block content %}
+  <br>
   <div class="container">
-    <h1>
-      Username: {{ worker.username }}
-      <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">
-        Delete
-      </a>
-
-      <a href="{% url 'manager:worker-update' pk=worker.id %}" class="btn btn-secondary link-to-page">
-        Update worker info
-      </a>
-    </h1>
-
-    <hr>
-
-    <div class="row">
-      <div class="col-md-6">
-        <h3>Personal Information</h3>
-
-        <table class="table table-striped">
-          <tr>
-            <td><strong>First name:</strong></td>
-            <td>{{ worker.first_name }}</td>
-          </tr>
-          <tr>
-            <td><strong>Last name:</strong></td>
-            <td>{{ worker.last_name }}</td>
-          </tr>
-          <tr>
-            <td><strong>Position:</strong></td>
-            <td>{{ worker.position }}</td>
-          </tr>
-        </table>
+    <div class="card">
+      <div class="card-header">
+        <h1 class="text-center">
+          Username: {{ worker.username }}
+          <a href="{% url 'manager:worker-delete' pk=worker.id %}" class="btn btn-danger link-to-page">Delete</a>
+          <a href="{% url 'manager:worker-update' pk=worker.id %}" class="btn btn-secondary link-to-page">Update worker info</a>
+        </h1>
       </div>
-
-      <div class="col-md-6">
-        <h3>Tasks</h3>
-
-        <h4>Completed tasks ✔️</h4>
-
-        {% if completed_tasks %}
-          {% for task in completed_tasks %}
-            <hr>
-            <p><strong>Name:</strong> <a href="{{ task.get_absolute_url }}">{{ task.name }}</a></p>
-            <p><strong>Task Type:</strong> {{ task.task_type.name }}</p>
-            <p class="text-muted"><strong>ID:</strong> {{ task.id }}</p>
-          {% endfor %}
-        {% else %}
-          <p>No completed tasks!</p>
-        {% endif %}
-
-        <br>
-
-        <h4>Tasks in progress ⏳</h4>
-
-        {% if uncompleted_tasks %}
-          {% for task in uncompleted_tasks %}
-            <hr>
-            <p><strong>Name:</strong> <a href="{{ task.get_absolute_url }}">{{ task.name }}</a></p>
-            <p><strong>Task Type:</strong> {{ task.task_type.name }}</p>
-            <p class="text-muted"><strong>ID:</strong> {{ task.id }}</p>
-          {% endfor %}
-        {% else %}
-          <p>All tasks done! Good job!</p>
-        {% endif %}
+      <div class="card-body">
+        <hr>
+        <div class="row">
+          <div class="col-md-6">
+            <h3>Personal Information</h3>
+            <table class="table table-striped">
+              <tr>
+                <td><strong>First name:</strong></td>
+                <td>{{ worker.first_name }}</td>
+              </tr>
+              <tr>
+                <td><strong>Last name:</strong></td>
+                <td>{{ worker.last_name }}</td>
+              </tr>
+              <tr>
+                <td><strong>Position:</strong></td>
+                <td>{{ worker.position }}</td>
+              </tr>
+            </table>
+          </div>
+          <div class="col-md-6">
+            <h3>Tasks</h3>
+            <div class="task-section">
+              <h4>Completed tasks ✔️</h4>
+              {% if completed_tasks %}
+                {% for task in completed_tasks %}
+                  <hr>
+                  <p><strong>Name:</strong> <a href="{{ task.get_absolute_url }}">{{ task.name }}</a></p>
+                  <p><strong>Task Type:</strong> {{ task.task_type.name }}</p>
+                  <p class="text-muted"><strong>ID:</strong> {{ task.id }}</p>
+                {% endfor %}
+                <nav aria-label="Completed Tasks Pagination">
+                  <ul class="pagination">
+                    {% if completed_tasks.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?completed_tasks_page={{ completed_tasks.previous_page_number }}">previous</a></li>
+                    {% endif %}
+                    {% for page in completed_tasks.paginator.page_range %}
+                      {% if completed_tasks.number == page %}
+                        <li class="page-item active"><a class="page-link" style="background-color: lightslategrey; color: beige" href="?completed_tasks_page={{ page }}">{{ page }} of {{ completed_tasks.paginator.num_pages }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if completed_tasks.has_next %}
+                      <li class="page-item"><a class="page-link" href="?completed_tasks_page={{ completed_tasks.next_page_number }}">next</a></li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              {% else %}
+                <p>No completed tasks!</p>
+              {% endif %}
+            </div>
+            <div class="task-section">
+              <h4>Uncompleted tasks ❌</h4>
+              {% if uncompleted_tasks %}
+                {% for task in uncompleted_tasks %}
+                  <hr>
+                  <p><strong>Name:</strong> <a href="{{ task.get_absolute_url }}">{{ task.name }}</a></p>
+                  <p><strong>Task Type:</strong> {{ task.task_type.name }}</p>
+                  <p class="text-muted"><strong>ID:</strong> {{ task.id }}</p>
+                {% endfor %}
+                <nav aria-label="Uncompleted Tasks Pagination">
+                  <ul class="pagination">
+                    {% if uncompleted_tasks.has_previous %}
+                      <li class="page-item"><a class="page-link" href="?uncompleted_tasks_page={{ uncompleted_tasks.previous_page_number }}">previous</a></li>
+                    {% endif %}
+                    {% for page in uncompleted_tasks.paginator.page_range %}
+                      {% if uncompleted_tasks.number == page %}
+                        <li class="page-item active"><a class="page-link" style="background-color: lightslategrey; color: beige" href="?uncompleted_tasks_page={{ page }}">{{ page }} of {{ uncompleted_tasks.paginator.num_pages }}</a></li>
+                      {% endif %}
+                    {% endfor %}
+                    {% if uncompleted_tasks.has_next %}
+                      <li class="page-item"><a class="page-link" href="?uncompleted_tasks_page={{ uncompleted_tasks.next_page_number }}">next</a></li>
+                    {% endif %}
+                  </ul>
+                </nav>
+              {% else %}
+                <p>No uncompleted tasks!</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

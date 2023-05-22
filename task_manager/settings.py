@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     "crispy_bootstrap4",
     'manager',
+    'datetimepicker',
 ]
 
 AUTH_USER_MODEL = "manager.Worker"

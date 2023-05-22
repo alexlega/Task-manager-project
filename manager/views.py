@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -188,9 +189,27 @@ class WorkerListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
+# class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
+#     model = Worker
+#     queryset = Worker.objects.all().prefetch_related("tasks__task_type")
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         worker = self.object
+#
+#         completed_tasks = Task.objects.filter(assignees=worker, is_completed=True)
+#         uncompleted_tasks = Task.objects.filter(assignees=worker, is_completed=False)
+#
+#         context["completed_tasks"] = completed_tasks
+#         context["uncompleted_tasks"] = uncompleted_tasks
+#
+#         return context
+
+
 class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
     model = Worker
     queryset = Worker.objects.all().prefetch_related("tasks__task_type")
+    paginate_by = 2
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -199,8 +218,18 @@ class WorkerDetailView(LoginRequiredMixin, generic.DetailView):
         completed_tasks = Task.objects.filter(assignees=worker, is_completed=True)
         uncompleted_tasks = Task.objects.filter(assignees=worker, is_completed=False)
 
-        context["completed_tasks"] = completed_tasks
-        context["uncompleted_tasks"] = uncompleted_tasks
+        # Pagination for completed tasks
+        completed_tasks_paginator = Paginator(completed_tasks, self.paginate_by)
+        completed_tasks_page_number = self.request.GET.get('completed_tasks_page')
+        completed_tasks_page = completed_tasks_paginator.get_page(completed_tasks_page_number)
+
+        # Pagination for uncompleted tasks
+        uncompleted_tasks_paginator = Paginator(uncompleted_tasks, self.paginate_by)
+        uncompleted_tasks_page_number = self.request.GET.get('uncompleted_tasks_page')
+        uncompleted_tasks_page = uncompleted_tasks_paginator.get_page(uncompleted_tasks_page_number)
+
+        context["completed_tasks"] = completed_tasks_page
+        context["uncompleted_tasks"] = uncompleted_tasks_page
 
         return context
 
@@ -297,7 +326,7 @@ class RejectTaskView(LoginRequiredMixin, DetailView):
 
     def post(self, request, *args, **kwargs):
         task = self.get_object()
-        task.is_completed = None
+        task.is_completed = not task.is_completed
         # task.complete_date = False # new string
         task.save()
         return redirect(reverse_lazy('manager:task-detail', kwargs={'pk': task.pk}))

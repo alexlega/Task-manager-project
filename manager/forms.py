@@ -26,7 +26,12 @@ class TaskForm(forms.ModelForm):
         queryset=get_user_model().objects.all(),
         widget=forms.CheckboxSelectMultiple,
     )
-    # description = forms.CharField(widget=forms.Textarea)
+
+    deadline = forms.DateField(
+        input_formats=['%Y-%m-%dT%H:%M'],
+        widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        required=False
+    )
 
     class Meta:
         model = Task

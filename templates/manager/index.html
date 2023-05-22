@@ -12,7 +12,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ num_workers }}</h5>
-                        <p class="card-text">Workers</p>
+                        <a class="card-text" href="{% url 'manager:worker-list' %}" style="color: black;">Workers</a>
                     </div>
                 </div>
             </div>
@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ num_positions }}</h5>
-                        <p class="card-text">Positions</p>
+                        <a class="card-text" href="{% url 'manager:position-list' %}" style="color: black;">Positions</a>
                     </div>
                 </div>
             </div>
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ num_tasks }}</h5>
-                        <p class="card-text">Tasks</p>
+                        <a class="card-text" href="{% url 'manager:task-list' %}" style="color: black;">Tasks</a>
                     </div>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ num_task_types }}</h5>
-                        <p class="card-text">Task Types</p>
+                        <a class="card-text" href="{% url 'manager:task-type-list' %}" style="color: black;">Task types</a>
                     </div>
                 </div>
             </div>

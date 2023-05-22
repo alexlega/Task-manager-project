@@ -2,7 +2,7 @@
 {% load crispy_forms_filters %}
 
 {% block content %}
-
+  <br>
   <div class="row justify-content-center">
     <div class="col-lg-8">
       <div class="card">
@@ -30,6 +30,7 @@
                   <th>ID</th>
                   <th>Task name</th>
                   <th>Task type</th>
+                  <th>Priority</th>
                   <th>Is completed</th>
                   <th>Deadline</th>
 {#                  <th>Expired</th>#}
@@ -37,15 +38,24 @@
                 </thead>
                 <tbody>
                 {% for task in task_list %}
-                  <tr>
-                    <td>{{ task.id }}</td>
-                    <td><a href="{{ task.get_absolute_url }}">{{ task.name }} {% if task in user.tasks.all %} (My
-                      task){% endif %}</a></td>
-                    <td>{{ task.task_type }}</td>
-                    <td>{% if task.is_completed == False %}❌{% else %}✅{% endif %}</td>
-                    <td>{{ task.deadline.date }}</td>
-{#                    <td>{% if task in expired_task and task.is_completed == False %} Worker missed deadline {% else %} All good! {% endif %}</td>#}
-                  </tr>
+                  {% if task in expired_task and task.is_completed is False %}
+                    <tr class="table-danger">
+                  {% else %}
+                    <tr>
+                  {% endif %}
+
+                      <td>{{ task.id }}</td>
+                      <td><a href="{{ task.get_absolute_url }}">{{ task.name }} {% if task in user.tasks.all %} (My
+                        task){% endif %}</a></td>
+                      <td>{{ task.task_type }}</td>
+                      <td>{% if task.priority == 'P4' %}🟢{% endif %}
+                          {% if task.priority == 'P3' %}🟡{% endif %}
+                          {% if task.priority == 'P2' %}🔴{% endif %}
+                          {% if task.priority == 'P1' %}⚠️{% endif %}</td>
+                      <td>{% if task.is_completed == False %}❌{% else %}✅{% endif %}</td>
+                      <td>{{ task.deadline.date }}</td>
+{#                      <td>{% if task in expired_task and task.is_completed == False %} Worker missed deadline {% else %} All good! {% endif %}</td>#}
+                    </tr>
                 {% endfor %}
                 </tbody>
               </table>
@@ -58,3 +68,87 @@
     </div>
   </div>
 {% endblock %}
+
+
+{#{% extends "base.html" %}#}
+{#{% load crispy_forms_filters %}#}
+{##}
+{#{% block content %}#}
+{#  <br>#}
+{#  <div class="row justify-content-center">#}
+{#    <div class="col-lg-8">#}
+{#      <div class="card">#}
+{#        <div class="card-body">#}
+{#          <h1 class="card-title">#}
+{#            Task list#}
+{#            <a href="{% url 'manager:task-create' %}" class="btn btn-dark float-right">#}
+{#              Create#}
+{#            </a>#}
+{#          </h1>#}
+{#          <br>#}
+{##}
+{#          <form action="" method="get" class="form-inline">#}
+{#            {{ search_form|crispy }}#}
+{#            <input type="submit" value="Search" class="btn btn-dark">#}
+{#          </form>#}
+{##}
+{#          <br>#}
+{##}
+{#          {% if task_list %}#}
+{#            <div class="table-responsive">#}
+{#              <table class="table table-hover">#}
+{#                <thead class="thead-dark">#}
+{#                <tr>#}
+{#                  <th>ID</th>#}
+{#                  <th>Task name</th>#}
+{#                  <th>Task type</th>#}
+{#                  <th>Priority</th>#}
+{#                  <th>Is completed</th>#}
+{#                  <th>Deadline</th>#}
+{#                  <th>Expired</th>#}
+{#                </tr>#}
+{#                </thead>#}
+{#                <tbody>#}
+{#                {% for task in task_list %}#}
+{#                  {% if task in expired_task and task.is_completed is False %}#}
+{#                    <tr class="table-danger">#}
+{#                      <td>{{ task.id }}</td>#}
+{#                      <td><a href="{{ task.get_absolute_url }}">{{ task.name }} {% if task in user.tasks.all %} (My#}
+{#                        task){% endif %}</a></td>#}
+{#                      <td>{{ task.task_type }}</td>#}
+{#                      <td>{% if task.priority == 'P4' %}🟢{% endif %}#}
+{#                          {% if task.priority == 'P3' %}🟡{% endif %}#}
+{#                          {% if task.priority == 'P2' %}🔴{% endif %}#}
+{#                          {% if task.priority == 'P1' %}⚠️{% endif %}</td>#}
+{#                      <td>{% if task.is_completed == False %}❌{% else %}✅{% endif %}</td>#}
+{#                      <td>{{ task.deadline.date }}</td>#}
+  {#                    <td>{% if task in expired_task and task.is_completed == False %} Worker missed deadline {% else %} All good! {% endif %}</td>#}
+{#                    </tr>#}
+{#                  {% else %}#}
+{#                    <tr>#}
+{#                      <td>{{ task.id }}</td>#}
+{#                      <td><a href="{{ task.get_absolute_url }}">{{ task.name }} {% if task in user.tasks.all %} (My#}
+{#                        task){% endif %}</a></td>#}
+{#                      <td>{{ task.task_type }}</td>#}
+{#                      <td>{% if task.priority == 'P4' %}🟢{% endif %}#}
+{#                          {% if task.priority == 'P3' %}🟡{% endif %}#}
+{#                          {% if task.priority == 'P2' %}🔴{% endif %}#}
+{#                          {% if task.priority == 'P1' %}⚠️{% endif %}</td>#}
+{#                      <td>{% if task.is_completed == False %}❌{% else %}✅{% endif %}</td>#}
+{#                      <td>{{ task.deadline.date }}</td>#}
+  {#                    <td>{% if task in expired_task and task.is_completed == False %} Worker missed deadline {% else %} All good! {% endif %}</td>#}
+{#                    </tr>#}
+{#                  {% endif %}#}
+{##}
+{#                {% endfor %}#}
+{#                </tbody>#}
+{#              </table>#}
+{#            </div>#}
+{#          {% else %}#}
+{#            <p>There are no tasks to do</p>#}
+{#          {% endif %}#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#  </div>#}
+{#{% endblock %}#}
